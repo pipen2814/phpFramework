@@ -1,0 +1,10 @@
+php_value auto_prepend_file "/var/www/app-router/index.php"
+
+Options +FollowSymLinks -MultiViews -Indexes
+
+RewriteBase /
+RewriteEngine On
+
+#RewriteRule ^app/(.*)$ /index.php?path=$1 [QSA,L]
+RewriteRule ^(app|api)/(.*)$ index.php?interface=$1&path=$2 [QSA,L]
+
