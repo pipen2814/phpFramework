@@ -4,7 +4,11 @@ use php\App;
 use php\exceptions\Exception;
 
 if (!$_REQUEST['path']){
-	header('Location: /app/login');
+	if (defined('FIRST_ACTION')) {
+		header('Location: '.FIRST_ACTION);
+	}else{
+		header('Location: /app/index');
+	}
 }
 
 try{

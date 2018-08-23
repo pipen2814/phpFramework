@@ -82,6 +82,8 @@ class Locale extends BaseObject {
 			$viewDirectoryAndName = substr( $this->xslFileRoot,strpos($this->xslFileRoot,DIR_VIEWS)+strlen(DIR_VIEWS)+strlen("/custom/"));
 		}elseif (strpos(strtoupper($this->xslFileRoot), strtoupper(DIR_VIEWS . "/crm/")) !== false ){
                         $viewDirectoryAndName = substr( $this->xslFileRoot,strpos($this->xslFileRoot,DIR_VIEWS)+strlen(DIR_VIEWS)+strlen("/crm/"));
+		}elseif (strpos(strtoupper($this->xslFileRoot), strtoupper(DIR_VIEWS )) !== false ){
+                        $viewDirectoryAndName = substr( $this->xslFileRoot,strpos($this->xslFileRoot,DIR_VIEWS)+strlen(DIR_VIEWS));
                 }
 
 		$localesDirectory = DIR_VIEWS."es_ES/";
@@ -168,7 +170,7 @@ class Locale extends BaseObject {
 	}
 
 	/**
-	 * Método encargado de buscar una traducción.
+	 * Metodo encargado de buscar una traduccion.
 	 *
 	 * @param $db
 	 * @param $domains
@@ -177,7 +179,7 @@ class Locale extends BaseObject {
 	 * @return string
 	 */
 	private function searchTraduction($db, $domains, $text){
-
+		//TODO:: Hay que eliminar la oblicacion de usar esta tabla, hay que abstraer la funcionalidad para poder decidir entre base de datos, fichero... o nada.
 		$domainsCond = "";
 		$domains = array_reverse($domains);
 		foreach($domains as $domain){

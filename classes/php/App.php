@@ -131,6 +131,7 @@ class App {
 
 		$fullControllerPathCustom = DIR_CLASSES_CUSTOM . $commonPath;
 		$fullControllerPathCRM = DIR_CLASSES_CRM . $commonPath;
+		$fullControllerPathPHP = DIR_CLASSES_PHP . $commonPath;
 
 		// Generamos el NS comun para crm y custom.
 		$commonNS = "controllers";
@@ -150,6 +151,12 @@ class App {
 			$controller = new $fullControllerNameCRM;
 
 			return $controller;
+		} elseif (file_exists($fullControllerPathPHP)) {
+			$fullControllerNamePHP = "php\\" . $commonNS;
+			$controller = new $fullControllerNamePHP;
+
+			return $controller;
+
 		} else {
 			throw new Exception("Controller Not Found");
 		}
@@ -208,7 +215,7 @@ class App {
 
 		// ReflectionClass del controlador y nos quedamos solo con lo siguiente de ...\controllers\.
 		$c = new \ReflectionClass($controller);
-		$path = str_replace('\\', '/', str_replace('custom\controllers', '', str_replace('crm\controllers', '', $c->getNamespaceName())));
+		$path = str_replace('\\', '/', str_replace('custom\controllers', '', str_replace('crm\controllers', '', str_replace('php\controllers', '', $c->getNamespaceName()))));
 
 		$viewName = (($path == '') ? '' : $path . '/');
 

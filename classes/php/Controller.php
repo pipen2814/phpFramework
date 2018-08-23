@@ -111,38 +111,6 @@ class Controller extends BaseObject {
 	}
 
 	/**
-	 * Metodo que se encarga de determinar y ejecutar la accion del controller.
-	 *
-	 * @return mixed|string
-	 */
-/*
-	protected function executeActionMethod(){
-                $this->args = new Hashtable($_REQUEST);
-
-		$stringAction = "default";
-		
-		if(!is_null($this->args->method)){
-			$stringAction = $this->args->method;
-		}
-		try{
-			$finalStringAction = $stringAction.'Action';
-
-			$appNode = null;
-			$appNode = $this->checkRequestInfo();
-			$alternativeView = $this->$finalStringAction($appNode);
-			if(!is_null($alternativeView)){
-				$stringAction = $alternativeView; 
-			}
-		}catch(Exception $e){
-			echo $e->getMessage();
-			exit;
-		}
-		return $stringAction;
-
-	}
-*/
-
-	/**
 	 * Metodo que setea la informacion del usuario.
 	 *
 	 * @return \php\XMLModel
@@ -177,7 +145,8 @@ class Controller extends BaseObject {
 				}
 			}
 		}else{ //Llamada por app normal
-
+			if($this->checkAppCredentials()){
+			//TODO: Agregar variable a config para determinar si se entra por login o no. En PHP no debemos obligar a login.
 			Session::startSession();
 			$appNode = $this->addMainNode();
 			if(!is_null(Session::getSessionVar('idUsuario')) && $_REQUEST['interface'] == 'app') {
@@ -190,7 +159,14 @@ class Controller extends BaseObject {
 				header("Location: /app/login.logout");
 			}
 			return $appNode;
+			}else{
+				//No hacemos que se compruebe nada, se continua la ejecucion normal. Configuracion por defecto para PHP
+			}
 		}
+	}
+
+	protected function checkAppCredentials(){
+		return false;
 	}
 
 	/**
@@ -213,12 +189,6 @@ class Controller extends BaseObject {
 	 * @throws \php\exceptions\Exception
 	 */
 	public function getOutput( $viewName = null, $isApi = null ){
-//		$this->checkRequestInfo();
-/*
-		if (is_null($viewName)){
-			$viewName = $this->executeActionMethod();
-		}
-*/
 		if ( $isApi ){ 
 			return json_encode($viewName);
 		}
@@ -231,6 +201,11 @@ class Controller extends BaseObject {
 			$this->compiler->setXslFileRoot($this->xslDocumentRoot."/crm/".$viewName.".xsl");
 
 			return $this->compiler->getOutput();
+		}elseif ( file_exists($this->xslDocumentRoot . $viewName . ".xsl") ){
+			$this->compiler->setXslFileRoot($this->xslDocumentRoot.$viewName.".xsl");
+
+			return $this->compiler->getOutput();
+		
 		}else{
 			if ($this->args->view == 'json' || $this->args->view == 'xml'){
 				return $this->compiler->getOutput();
