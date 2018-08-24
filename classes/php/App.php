@@ -230,7 +230,7 @@ class App {
 			}
 		}
 
-		return strtolower($viewName);
+		return $viewName;
 	}
 
 	/**
