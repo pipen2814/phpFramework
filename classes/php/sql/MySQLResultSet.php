@@ -45,7 +45,7 @@ class MySQLResultSet extends ResultSet {
 	 */
 	public function __destruct(){
 		$this->free();
-		unset($this);
+		//unset($this);
 	}
 
 	/**
