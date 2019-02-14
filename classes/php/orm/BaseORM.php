@@ -210,11 +210,29 @@ class BaseORM extends Hashtable {
 		}
 
 		$whereClause = [];
-		for($i = 0; $i < count($this->id); $i++){
-			$whereClause[] = " ".$this->id[$i] ." = '".$params[$i]."' ";
+		foreach($params as $param){
+			foreach($param as $name => $value){
+				$key = array_search ($name, $this->fields);
+				$whereClause[] = " ".$key ." = '".$value."' ";
+			}
+		}
+		if(count($whereClause) > 0){
+			$this->db->ExecQuery("delete from ".$this->tableName." where ".join("and", $whereClause).";");
+		}
+	}
+
+	/**
+	 * Elimina el registro perteneciente a la instancia actual
+	 *
+	 */
+	public function delete(){
+		$params = array();
+		foreach($this->id as $fieldName){
+			$alias = $this->fields[$fieldName];
+			$params[$this->fields[$fieldName]] = $this->$alias;
 		}
 
-		$this->db->ExecQuery("delete from ".$this->tableName." where ".join("and", $whereClause).";");
+		$this->deleteById($params);
 	}
 
 	/**
