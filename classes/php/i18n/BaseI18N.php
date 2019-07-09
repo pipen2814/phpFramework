@@ -18,7 +18,7 @@ class BaseI18N extends BaseObject {
 	public static $key;
 
 	/**
-	 * Método que devuelve la traducción de un elemento del i18n.
+	 * Metodo que devuelve la traduccion de un elemento del i18n.
 	 * @param $key
 	 *
 	 * @return string
@@ -27,7 +27,7 @@ class BaseI18N extends BaseObject {
 
 		$db = DB::getInstance();
 		$key = static::$key.".$key";
-		$db->query("select txt from crm_master.trads_ES where dominio = 'i18n_trads' and clave = '{$key}'");
+		$db->query("select txt from trads_ES where dominio = 'i18n_trads' and clave = '{$key}'");
 		$rs = $db->getRs();
 		
 		if($reg = $rs->next()){
@@ -38,7 +38,7 @@ class BaseI18N extends BaseObject {
 	}
 
 	/**
-	 * Método que devuelve todos los elementos del i18n con sus traducciones.
+	 * Metodo que devuelve todos los elementos del i18n con sus traducciones.
 	 *
 	 * @return array
 	 */
@@ -57,4 +57,3 @@ class BaseI18N extends BaseObject {
 		return $trads;
 	}
 }
-?>
